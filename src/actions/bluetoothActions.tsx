@@ -1,4 +1,10 @@
-import {addDevice, bluetoothOff, bluetoothOn, updateDevice} from '.';
+import {
+  addDevice,
+  bluetoothOff,
+  bluetoothOn,
+  setMessage,
+  updateDevice,
+} from '.';
 import {Device} from '../types';
 
 export const scan = () => {
@@ -6,6 +12,7 @@ export const scan = () => {
     dispatch(bluetoothOn());
     DeviceManager.startDeviceScan(null, null, (error, device) => {
       if (error) {
+        dispatch(setMessage(error.message));
         console.error(error);
         return;
       }
@@ -70,7 +77,8 @@ export const updateConnect = (device: Device) => {
             isConnecting: false,
           }),
         );
-        console.log(deviceUpdated);
+        dispatch(setMessage(`${deviceUpdated.id} is connected`));
+        // console.log(deviceUpdated);
       })
       .catch((error: any) => {
         dispatch(
@@ -79,7 +87,7 @@ export const updateConnect = (device: Device) => {
             isConnecting: false,
           }),
         );
-        console.log(error);
+        dispatch(setMessage(error.message));
       });
   };
 };

@@ -18,6 +18,7 @@ const HomeScreen: React.FC<Props> = () => {
 
   const devices = useSelector(state => state.bluetooth.devices);
   const bluetoothStatus = useSelector(state => state.bluetooth.isBluetoothOn);
+  const errorMessage = useSelector(state => state.bluetooth.message)
   let color = bluetoothStatus ? '#798ce0' : 'grey';
 
   useEffect(() => {
@@ -26,10 +27,12 @@ const HomeScreen: React.FC<Props> = () => {
 
   return (
     <View style={{...styles.mainContainerStyle, backgroundColor: color}}>
-      {/* <Text style={styles.text}> Some Text </Text> */}
       <Button title="TurnOn" onPress={() => dispatch(scan())} />
       <Button title="TurnOff" onPress={() => dispatch(stopScan())} />
       <Button title="RESET" onPress={() => dispatch(reset())} />
+      <Text style={styles.text}>
+        {errorMessage !== '' ? errorMessage : ' '}
+      </Text>
       <FlatList
         style={{width: '100%'}}
         data={devices}

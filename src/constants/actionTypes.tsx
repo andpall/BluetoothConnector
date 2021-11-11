@@ -4,3 +4,4 @@ export const RESET = 'RESET';
 export const CHANGECURRENTDEVICE = 'CHANGECURRENTDEVICE';
 export const ADDDEVICE = 'ADDDEVICE';
 export const UPDATEDEVICE = 'UPDATEDEVICE';
+export const SETMESSAGE = 'SETMESSAGE';

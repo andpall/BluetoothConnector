@@ -28,4 +28,10 @@ export const updateDevice = (device: Device) => {
     payload: device,
   };
 };
+export const setMessage = (message: string) => {
+  return {
+    type: types.SETMESSAGE,
+    payload: message,
+  };
+};
 
