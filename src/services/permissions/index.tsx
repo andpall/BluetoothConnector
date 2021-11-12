@@ -1,6 +1,6 @@
 import {
   PERMISSIONS,
-    RESULTS,
+  RESULTS,
   checkMultiple,
   requestMultiple,
 } from 'react-native-permissions';
@@ -41,6 +41,7 @@ const checkBluetooth_ = async () => {
 
 const requestBluetooth_ = async () => {
   requestMultiple([
+    PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
     PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
     PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
     PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE,
@@ -48,6 +49,5 @@ const requestBluetooth_ = async () => {
     console.debug('Bluetooth', statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN]);
   });
 };
-
 
 export {checkBluetooth_, requestBluetooth_};

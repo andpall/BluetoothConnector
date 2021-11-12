@@ -1,3 +1,4 @@
+import {BleManager, Device} from 'react-native-ble-plx';
 import {
   addDevice,
   bluetoothOff,
@@ -5,39 +6,46 @@ import {
   setMessage,
   updateDevice,
 } from '.';
-import {Device} from '../types';
+import {AppDispatch, RootState} from '../store/store';
+// import {Device} from '../types';
 
 export const scan = () => {
-  return (dispatch, getState, DeviceManager) => {
-    dispatch(bluetoothOn());
+  return (
+    dispatch: AppDispatch,
+    getState: () => RootState,
+    DeviceManager: BleManager,
+  ) => {
     DeviceManager.startDeviceScan(null, null, (error, device) => {
       if (error) {
-        dispatch(setMessage(error.message));
-        console.error(error);
+        dispatch(setMessage(JSON.stringify(error)));
+        // console.error(error);
         return;
       }
-      device.isConnected().then((isConnected: boolean) => {
-        let {
-          bluetooth: {devices},
-        } = getState();
+      dispatch(bluetoothOn());
 
-        const isScanned = checkIsScanned(device, devices);
-        if (!isScanned) {
-          dispatch(
-            addDevice({
-              id: device.id,
-              name: device.name,
-              isConnected: isConnected,
-              isConnecting: false,
-            }),
-          );
-        }
-      });
+      device &&
+        device.isConnected().then((isConnected: boolean) => {
+          let {
+            ble: {devices},
+          } = getState();
+
+          const isScanned = checkIsScanned(device, devices);
+          if (!isScanned) {
+            dispatch(
+              addDevice({
+                ...device,
+                isConnected: isConnected,
+                isConnecting: false,
+              }),
+            );
+          }
+        });
     });
+    dispatch(setMessage(''));
   };
 };
 
-const checkIsScanned = (device: any, devices: any[]) => {
+const checkIsScanned = (device: Device, devices: Device[]) => {
   const found = devices.find(
     deviceInStorage => deviceInStorage.id === device.id,
   );
@@ -48,9 +56,13 @@ const checkIsScanned = (device: any, devices: any[]) => {
 };
 
 export const stopScan = () => {
-  return (dispatch, getState, DeviceManager) => {
+  return (
+    dispatch: AppDispatch,
+    getState: () => RootState,
+    DeviceManager: BleManager,
+  ) => {
     let {
-      bluetooth: {device, devices},
+      ble: {device, devices},
     } = getState();
     DeviceManager.stopDeviceScan();
     dispatch(bluetoothOff());
@@ -58,9 +70,13 @@ export const stopScan = () => {
 };
 
 export const updateConnect = (device: Device) => {
-  return (dispatch, getState, DeviceManager) => {
+  return (
+    dispatch: AppDispatch,
+    getState: () => RootState,
+    DeviceManager: BleManager,
+  ) => {
     let {
-      bluetooth: {devices},
+      ble: {devices},
     } = getState();
     dispatch(
       updateDevice({
@@ -77,7 +93,8 @@ export const updateConnect = (device: Device) => {
             isConnecting: false,
           }),
         );
-        dispatch(setMessage(`${deviceUpdated.id} is connected`));
+        dispatch(setMessage(JSON.stringify(deviceUpdated)));
+        // dispatch(setMessage(`${deviceUpdated.id} is connected`));
         // console.log(deviceUpdated);
       })
       .catch((error: any) => {
@@ -87,7 +104,7 @@ export const updateConnect = (device: Device) => {
             isConnecting: false,
           }),
         );
-        dispatch(setMessage(error.message));
+        dispatch(setMessage(JSON.stringify(error)));
       });
   };
 };

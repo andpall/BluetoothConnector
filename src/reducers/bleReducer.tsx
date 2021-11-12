@@ -39,8 +39,8 @@ const bleReducer = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         devices: [
-          ...state.devices.filter(item => item.id !== action.payload.id),
           action.payload,
+          ...state.devices.filter(item => item.id !== action.payload.id),
         ],
       };
     }

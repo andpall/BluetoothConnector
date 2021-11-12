@@ -1,9 +1,9 @@
-import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
+import {createStore, applyMiddleware, compose, combineReducers, Dispatch, AnyAction} from 'redux';
 import logger from 'redux-logger';
 import {persistReducer, persistStore} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import thunkMiddleware from 'redux-thunk';
-import {BleManager} from 'react-native-ble-plx';
+import {BleManager, Device} from 'react-native-ble-plx';
 import {composeWithDevTools} from 'redux-devtools-extension';
 
 import bleReducer from '../reducers';
@@ -12,15 +12,16 @@ import bleReducer from '../reducers';
 export interface RootState {
   ble: {
     device: {id: string; name: string; isConnected: boolean};
-    devices: any[];
+    devices: Device[];
     isBluetoothOn: boolean;
     message: string;
   };
 }
+export type AppDispatch = Dispatch<AnyAction>;
 
 export const configureStore = () => {
   const rootReducer = combineReducers({
-    bluetooth: bleReducer,
+    ble: bleReducer,
   });
 
   const persistConfig = {

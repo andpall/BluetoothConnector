@@ -27,15 +27,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   connectButton: {
-    width: 150,
+    width: 105,
     height: 50,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#c4c8cc',
-    marginLeft: 15,
+    marginLeft: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#798ce0',
   },
   deviceId: {
     fontSize: 16,
@@ -43,11 +42,12 @@ const styles = StyleSheet.create({
   },
   connectButtonContainer: {
     flex: 1,
-    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    flexDirection: 'row'
   },
   connectButtonText: {
     color: 'black',
-    fontSize: 20,
+    fontSize: 18,
   },
 });
 export default styles;
