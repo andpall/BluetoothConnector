@@ -14,7 +14,7 @@ const Modalka = (props: CProps) => {
   return (
     <View style={styles.centeredView}>
       <Modal
-        animationType="slide"
+        animationType='fade'
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -24,7 +24,6 @@ const Modalka = (props: CProps) => {
           <ScrollView contentContainerStyle={styles.modalView}>
             <Text style={styles.modalText}>{message}</Text>
             <Button
-            //   style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(false)}
               textStyle={styles.textStyle}
               title="Hide"
