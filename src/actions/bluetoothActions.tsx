@@ -7,7 +7,6 @@ import {
   updateDevice,
 } from '.';
 import {AppDispatch, RootState} from '../store/store';
-// import {Device} from '../types';
 
 export const scan = () => {
   return (
@@ -18,7 +17,6 @@ export const scan = () => {
     DeviceManager.startDeviceScan(null, null, (error, device) => {
       if (error) {
         dispatch(setMessage(JSON.stringify(error)));
-        // console.error(error);
         return;
       }
       dispatch(bluetoothOn());
@@ -94,8 +92,6 @@ export const updateConnect = (device: Device) => {
           }),
         );
         dispatch(setMessage(JSON.stringify(deviceUpdated)));
-        // dispatch(setMessage(`${deviceUpdated.id} is connected`));
-        // console.log(deviceUpdated);
       })
       .catch((error: any) => {
         dispatch(

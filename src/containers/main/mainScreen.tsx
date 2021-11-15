@@ -12,6 +12,7 @@ import {checkBluetooth_, requestBluetooth_} from '../../services/permissions';
 import DeviceComponent from '../../components/device';
 import {RootState} from '../../store';
 import Modalka from '../../components/modal/modal';
+import { BLUETOOTH_BUTTON_RESET, BLUETOOTH_BUTTON_TURN_OFF, BLUETOOTH_BUTTON_TURN_ON } from '../../constants/titles';
 
 type Props = {};
 const windowWidth = Dimensions.get('window').width;
@@ -48,9 +49,9 @@ const HomeScreen: React.FC<Props> = () => {
           message={modalText}
         />
         <View style={styles.buttonContainer}>
-          <Button title="TurnOn" onPress={() => dispatch(scan())} />
-          <Button title="TurnOff" onPress={() => dispatch(stopScan())} />
-          <Button title="RESET" onPress={() => dispatch(reset())} />
+          <Button title={BLUETOOTH_BUTTON_TURN_ON} onPress={() => dispatch(scan())} />
+          <Button title={BLUETOOTH_BUTTON_TURN_OFF} onPress={() => dispatch(stopScan())} />
+          <Button title={BLUETOOTH_BUTTON_RESET} onPress={() => dispatch(reset())} />
         </View>
         <ScrollView
           style={{height: windowHeight * 0.4}}
@@ -62,7 +63,6 @@ const HomeScreen: React.FC<Props> = () => {
       </View>
       <View style={styles.listContainer}>
         <FlatList
-          // ListHeaderComponent={LostHeader}
           style={{width: '100%'}}
           data={devices}
           renderItem={({item}) => (

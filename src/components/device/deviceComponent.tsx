@@ -2,12 +2,17 @@ import React, {useEffect, useState} from 'react';
 import {Text, Pressable, View, Image, ActivityIndicator} from 'react-native';
 import styles from './styles';
 
-// import {Device} from '../../types';
 import Button from '../button';
 import {useDispatch} from 'react-redux';
 import {setMessage, updateDevice} from '../../actions';
 import {updateConnect} from '../../actions/bluetoothActions';
 import {Device} from 'react-native-ble-plx';
+import {COLOR_MUDDY_BLUE, COLOR_WHITE} from '../../constants/colors';
+import {
+  DEVICE_BUTTON_CONNECT,
+  DEVICE_BUTTON_CONNECTED,
+  DEVICE_BUTTON_CONNECTING,
+} from '../../constants/titles';
 
 type Props = {
   device: Device;
@@ -24,12 +29,14 @@ const DeviceComponent = (props: Props) => {
   const isConnected = device.isConnected;
   const isConnecting = device.isConnecting;
 
-  const color = isConnected ? '#798ce0' : '#ffffff';
-  const title = isConnecting
-    ? 'Connecting..'
-    : isConnected
-    ? 'Connected'
-    : 'Connect';
+  const color = isConnected ? COLOR_MUDDY_BLUE : COLOR_WHITE;
+  const title = () => {
+    if (isConnecting) {
+      return DEVICE_BUTTON_CONNECTING;
+    } else {
+      return isConnected ? DEVICE_BUTTON_CONNECTED : DEVICE_BUTTON_CONNECT;
+    }
+  };
 
   useEffect(() => {
     setDeviceName(device.name);
@@ -47,8 +54,7 @@ const DeviceComponent = (props: Props) => {
     txPowerLevel: device.txPowerLevel,
   };
 
-  const deviceShortText =
-    `id : ${device.id} \nname : ${device.name} \n txLevel : ${device.txPowerLevel}`;
+  const deviceShortText = `id : ${device.id} \nname : ${device.name} \n txLevel : ${device.txPowerLevel}`;
 
   const pressHanlderInfo = () => {
     setModalText(deviceShortText);
@@ -73,7 +79,7 @@ const DeviceComponent = (props: Props) => {
           />
           <Button
             style={{...styles.connectButton, backgroundColor: color}}
-            title={title}
+            title={title()}
             textStyle={styles.connectButtonText}
             onPress={pressHanlderConnect}
           />

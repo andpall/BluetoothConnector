@@ -7,7 +7,6 @@ import {BleManager, Device} from 'react-native-ble-plx';
 import {composeWithDevTools} from 'redux-devtools-extension';
 
 import bleReducer from '../reducers';
-// import { apiMiddleware } from '../services/api'
 
 export interface RootState {
   ble: {
@@ -36,15 +35,6 @@ export const configureStore = () => {
       new BleManager({
         restoreStateIdentifier: 'BleInTheBackground',
         restoreStateFunction: restoredState => {
-          if (restoredState == null) {
-            // console.log('restoredState null');
-            // console.log(restoredState);
-            // BleManager was constructed for the first time.
-          } else {
-            // console.log('restoredState');
-            // console.log(restoredState);
-            // BleManager was restored. Check restoredState.connectedPeripherals property.
-          }
         },
       }),
     ),
