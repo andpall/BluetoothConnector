@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, FlatList, ScrollView, Dimensions} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
-import { RootStackParamList } from '../../../types';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
+import {RootStackParamList} from '../../../types';
+import {useFocusEffect} from '@react-navigation/native';
 
 import styles from './styles';
 
@@ -20,8 +21,7 @@ import {
   BLUETOOTH_BUTTON_TURN_ON,
 } from '../../../constants/titles';
 import {COLOR_GREY, COLOR_MUDDY_BLUE} from '../../../constants/colors';
-import * as routes from '../../../constants/routes'
-
+import * as routes from '../../../constants/routes';
 
 type ScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -40,15 +40,24 @@ const HomeScreen: React.FC<Props> = () => {
   );
 
   const dispatch = useDispatch();
-  const navigation = useNavigation<ScreenNavigationProp>()
+  const navigation = useNavigation<ScreenNavigationProp>();
   const errorMessage = useSelector((state: RootState) => state.ble.message);
 
   let color = bluetoothStatus ? COLOR_MUDDY_BLUE : COLOR_GREY;
   const [modalVisible, setModalVisible] = useState(false);
   const [modalText, setModalText] = useState('');
 
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(reset());
+      dispatch(scan());
+
+      return () => dispatch(stopScan());
+    }, []),
+  );
+
   const nextPressHandler = () => {
-    navigation.navigate(routes.DEVICE_LOG_SCREEN)
+    navigation.navigate(routes.DEVICE_LOG_SCREEN);
   };
 
   return (
@@ -59,30 +68,6 @@ const HomeScreen: React.FC<Props> = () => {
           setModalVisible={setModalVisible}
           message={modalText}
         />
-        <View style={styles.buttonContainer}>
-          <Button
-            title={BLUETOOTH_BUTTON_TURN_ON}
-            style={styles.button}
-            onPress={() => dispatch(scan())}
-          />
-          <Button
-            title={BLUETOOTH_BUTTON_TURN_OFF}
-            style={styles.button}
-            onPress={() => dispatch(stopScan())}
-          />
-          <Button
-            title={BLUETOOTH_BUTTON_RESET}
-            style={styles.button}
-            onPress={() => dispatch(reset())}
-          />
-        </View>
-        <ScrollView
-          style={{height: windowHeight * 0.4}}
-          nestedScrollEnabled={true}>
-          <Text style={styles.text}>
-            {errorMessage !== '' ? errorMessage : ' '}
-          </Text>
-        </ScrollView>
       </View>
       <View style={styles.listContainer}>
         <FlatList
