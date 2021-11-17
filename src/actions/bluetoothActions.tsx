@@ -84,16 +84,31 @@ export const disconnectDevice = () => {
     let {
       ble: {device, devices},
     } = getState();
-    DeviceManager.cancelDeviceConnection(device.id)
-        .then(deviceUpdated => {
-          const deviceState = {
-            ...deviceUpdated,
-            isConnected: false,
-            isConnecting: false,
-          };
-          dispatch(updateDevice(deviceState));
-          dispatch(setDevice(emptyDevice));
-        })
+    DeviceManager.cancelDeviceConnection(device.id).then(deviceUpdated => {
+      const deviceState = {
+        ...deviceUpdated,
+        isConnected: false,
+        isConnecting: false,
+      };
+      dispatch(updateDevice(deviceState));
+      dispatch(setDevice(emptyDevice));
+    });
+  };
+};
+
+export const subscibeOnDevice = (onDisconnect: () => void) => {
+  return (
+    dispatch: AppDispatch,
+    getState: () => RootState,
+    DeviceManager: BleManager,
+  ) => {
+    let {
+      ble: {device, devices},
+    } = getState();
+    console.log('DISCONNECTED')
+    DeviceManager.onDeviceDisconnected(device.id, () => {
+      onDisconnect();
+    });
   };
 };
 
@@ -115,7 +130,6 @@ export const updateConnect = (connectingDevice: Device) => {
             isConnecting: false,
           };
           dispatch(updateDevice(deviceState));
-          console.log('INSIDE CANSEL');
           dispatch(setDevice(emptyDevice));
           connectDevice(dispatch, getState, DeviceManager, connectingDevice);
         })
@@ -134,7 +148,6 @@ const connectDevice = (
   DeviceManager: BleManager,
   connectingDevice: Device,
 ) => {
-  console.log('BEFORE CONNECTING');
   dispatch(
     updateDevice({
       ...connectingDevice,
@@ -168,7 +181,6 @@ const connectDevice = (
         isConnecting: false,
       };
       dispatch(updateDevice(deviceState));
-      console.log('INSIDE CATCH');
       dispatch(setDevice(emptyDevice));
       dispatch(setMessage(JSON.stringify(error)));
     });

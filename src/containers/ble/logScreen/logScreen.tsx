@@ -5,75 +5,75 @@ import styles from './styles';
 
 import Button from '../../../components/button';
 import {useDispatch, useSelector} from 'react-redux';
-import {reset} from '../../../actions';
-import {scan, stopScan} from '../../../actions/bluetoothActions';
-import {checkBluetooth_, requestBluetooth_} from '../../../services/permissions';
-import DeviceComponent from '../../../components/device';
+import {reset, setMessage} from '../../../actions';
+import {
+  disconnectDevice,
+  scan,
+  stopScan,
+  subscibeOnDevice,
+} from '../../../actions/bluetoothActions';
 import {RootState} from '../../../store';
-import Modalka from '../../../components/modal/modal';
-import { BLUETOOTH_BUTTON_RESET, BLUETOOTH_BUTTON_TURN_OFF, BLUETOOTH_BUTTON_TURN_ON } from '../../../constants/titles';
-import { COLOR_GREY, COLOR_MUDDY_BLUE } from '../../../constants/colors';
+import {
+  BLUETOOTH_BUTTON_RESET,
+  BLUETOOTH_BUTTON_TURN_OFF,
+  BLUETOOTH_BUTTON_TURN_ON,
+} from '../../../constants/titles';
+import {COLOR_GREY, COLOR_MUDDY_BLUE} from '../../../constants/colors';
+import * as routes from '../../../constants/routes';
+import {Device} from 'react-native-ble-plx';
+import Navigation from '../../../navigation';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
+import {RootStackParamList} from '../../../types';
 
 type Props = {};
+type ScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Main'
+>;
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const HomeScreen: React.FC<Props> = () => {
   const devices = useSelector((state: RootState) => state.ble.devices);
+  const device = useSelector((state: RootState) => state.ble.device);
   const bluetoothStatus = useSelector(
     (state: RootState) => state.ble.isBluetoothOn,
   );
 
   const dispatch = useDispatch();
-  const errorMessage = useSelector((state: RootState) => state.ble.message);
+  const navigation = useNavigation<ScreenNavigationProp>();
 
   let color = bluetoothStatus ? COLOR_MUDDY_BLUE : COLOR_GREY;
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalText, setModalText] = useState('');
+  const [text, setText] = useState('');
 
-  useEffect(() => {
-    askPermissions();
-  }, []);
-
-  const askPermissions = async () => {
-    await checkBluetooth_();
-    await requestBluetooth_();
+  const subscriber = () => {
+    dispatch(subscibeOnDevice(() => setText('Device is disconnected')));
   };
+  useEffect(() => {
+    setText(JSON.stringify(device));
+    subscriber();
+    return subscriber;
+  }, []);
 
   return (
     <View style={{...styles.mainContainerStyle, backgroundColor: color}}>
       <View style={styles.listHeader}>
-        <Modalka
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          message={modalText}
-        />
         <View style={styles.buttonContainer}>
-          <Button title={BLUETOOTH_BUTTON_TURN_ON} onPress={() => dispatch(scan())} />
-          <Button title={BLUETOOTH_BUTTON_TURN_OFF} onPress={() => dispatch(stopScan())} />
-          <Button title={BLUETOOTH_BUTTON_RESET} onPress={() => dispatch(reset())} />
+          <Button
+            style={styles.button}
+            title={BLUETOOTH_BUTTON_RESET}
+            onPress={() => dispatch(disconnectDevice())}
+          />
+          <Button
+            style={styles.button}
+            title={BLUETOOTH_BUTTON_RESET}
+            onPress={() => navigation.navigate(routes.DEVICE_LIST_SCREEN)}
+          />
         </View>
-        <ScrollView
-          style={{height: windowHeight * 0.4}}
-          nestedScrollEnabled={true}>
-          <Text style={styles.text}>
-            {errorMessage !== '' ? errorMessage : ' '}
-          </Text>
+        <ScrollView style={{height: windowHeight}} nestedScrollEnabled={true}>
+          <Text style={styles.text}>{text}</Text>
         </ScrollView>
-      </View>
-      <View style={styles.listContainer}>
-        <FlatList
-          style={{width: '100%'}}
-          data={devices}
-          renderItem={({item}) => (
-            <DeviceComponent
-              key={item.id}
-              device={item}
-              setModalVisible={value => setModalVisible(value)}
-              setModalText={value => setModalText(value)}
-            />
-          )}
-        />
       </View>
     </View>
   );

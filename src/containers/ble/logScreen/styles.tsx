@@ -16,6 +16,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
   },
+  button: {
+    marginVertical: 7,
+    marginHorizontal: 3,
+  },
 });
 
 export default styles;

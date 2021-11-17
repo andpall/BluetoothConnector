@@ -3,9 +3,9 @@ import {Text, Pressable, View, Image, ActivityIndicator} from 'react-native';
 import styles from './styles';
 
 import Button from '../button';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setMessage, updateDevice} from '../../actions';
-import {updateConnect} from '../../actions/bluetoothActions';
+import {disconnectDevice, updateConnect} from '../../actions/bluetoothActions';
 import {Device} from 'react-native-ble-plx';
 import {COLOR_MUDDY_BLUE, COLOR_WHITE} from '../../constants/colors';
 import {
@@ -25,6 +25,7 @@ const DeviceComponent = (props: Props) => {
   const [deviceName, setDeviceName] = useState<string>('');
   const [deviceId, setDeviceId] = useState('');
   const dispatch = useDispatch();
+  const {} = useSelector(state => state.ble);
 
   const isConnected = device.isConnected;
   const isConnecting = device.isConnecting;
@@ -45,7 +46,11 @@ const DeviceComponent = (props: Props) => {
   const EmptyPressHanlder = () => {};
 
   const pressHanlderConnect = () => {
-    dispatch(updateConnect(device));
+    if (device.isConnected || device.isConnecting) dispatch(disconnectDevice());
+    else {
+      dispatch(updateConnect(device));
+    }
+    // dispatch(disconnectDevice());
   };
 
   const deviceShortInfo = {

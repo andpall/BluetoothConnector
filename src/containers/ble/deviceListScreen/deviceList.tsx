@@ -1,5 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, ScrollView, Dimensions} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
+import { RootStackParamList } from '../../../types';
 
 import styles from './styles';
 
@@ -7,10 +10,6 @@ import Button from '../../../components/button';
 import {useDispatch, useSelector} from 'react-redux';
 import {reset} from '../../../actions';
 import {scan, stopScan} from '../../../actions/bluetoothActions';
-import {
-  checkBluetooth_,
-  requestBluetooth_,
-} from '../../../services/permissions';
 import DeviceComponent from '../../../components/device';
 import {RootState} from '../../../store';
 import Modalka from '../../../components/modal/modal';
@@ -20,6 +19,13 @@ import {
   BLUETOOTH_BUTTON_TURN_ON,
 } from '../../../constants/titles';
 import {COLOR_GREY, COLOR_MUDDY_BLUE} from '../../../constants/colors';
+import * as routes from '../../../constants/routes'
+
+
+type ScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Main'
+>;
 
 type Props = {};
 const windowWidth = Dimensions.get('window').width;
@@ -33,22 +39,16 @@ const HomeScreen: React.FC<Props> = () => {
   );
 
   const dispatch = useDispatch();
+  const navigation = useNavigation<ScreenNavigationProp>()
   const errorMessage = useSelector((state: RootState) => state.ble.message);
 
   let color = bluetoothStatus ? COLOR_MUDDY_BLUE : COLOR_GREY;
   const [modalVisible, setModalVisible] = useState(false);
   const [modalText, setModalText] = useState('');
 
-  useEffect(() => {
-    askPermissions();
-  }, []);
-
-  const askPermissions = async () => {
-    await checkBluetooth_();
-    await requestBluetooth_();
+  const nextPressHandler = () => {
+    navigation.navigate(routes.DEVICE_LOG_SCREEN)
   };
-
-  const nextPressHandler = () => {};
 
   return (
     <View style={{...styles.mainContainerStyle, backgroundColor: color}}>
