@@ -84,6 +84,16 @@ export const disconnectDevice = () => {
     let {
       ble: {device, devices},
     } = getState();
+    DeviceManager.cancelDeviceConnection(device.id)
+        .then(deviceUpdated => {
+          const deviceState = {
+            ...deviceUpdated,
+            isConnected: false,
+            isConnecting: false,
+          };
+          dispatch(updateDevice(deviceState));
+          dispatch(setDevice(emptyDevice));
+        })
   };
 };
 
