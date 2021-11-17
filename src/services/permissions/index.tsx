@@ -3,39 +3,50 @@ import {
   RESULTS,
   checkMultiple,
   requestMultiple,
+  PermissionStatus,
 } from 'react-native-permissions';
 
-const checkBluetooth_ = async () => {
-  checkMultiple([
+const checkBluetooth_ = async (): Promise<{
+  value: boolean;
+  message: string;
+}> => {
+  return checkMultiple([
+    PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
     PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
     PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
     PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE,
   ])
     .then(statuses => {
-      switch (statuses) {
-        case statuses[RESULTS.UNAVAILABLE]:
-          console.log(
-            'This feature is not available (on this device / in this context)',
-          );
+      switch (statuses['android.permission.ACCESS_FINE_LOCATION']) {
+        case 'unavailable':
+          return {value: false, message: 'This feature is not available'};
           break;
-        case statuses[RESULTS.DENIED]:
-          console.log(
-            'The permission has not been requested / is denied but requestable',
-          );
+        case 'blocked':
+          return {
+            value: false,
+            message: 'The permission has not been blocked',
+          };
           break;
-        case statuses[RESULTS.LIMITED]:
-          console.log('The permission is limited: some actions are possible');
+        case 'limited':
+          return {
+            value: false,
+            message: 'The permission is limited',
+          };
+
           break;
-        case statuses[RESULTS.GRANTED]:
-          console.log('The permission is granted');
+        case 'granted':
+          return {value: true, message: 'The permission is granted'};
           break;
-        case statuses[RESULTS.BLOCKED]:
-          console.log('The permission is denied and not requestable anymore');
+        case 'denied':
+          return {
+            value: true,
+            message: 'The permission is denied and not requestable anymore',
+          };
           break;
       }
     })
     .catch(error => {
-      console.debug(error);
+      return {value: true, message: error};
     });
 };
 
@@ -46,7 +57,7 @@ const requestBluetooth_ = async () => {
     PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
     PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE,
   ]).then(statuses => {
-    console.debug('Bluetooth', statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN]);
+    return (`Bluetooth ${statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]}`);
   });
 };
 

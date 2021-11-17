@@ -35,6 +35,12 @@ const bleReducer = (state = initialState, action: AnyAction) => {
         devices: [...state.devices, action.payload],
       };
     }
+    case types.SETDEVICE: {
+      return {
+        ...state,
+        device: action.payload,
+      };
+    }
     case types.UPDATEDEVICE: {
       return {
         ...state,

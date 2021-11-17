@@ -4,12 +4,10 @@ const styles = StyleSheet.create({
   mainContainer: {
     color: 'grey',
     paddingVertical: 2,
-    paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: '#c4c8cc',
     borderRadius: 1,
     backgroundColor: 'white',
-    marginVertical: 0,
     width: '100%',
     height: 60,
   },
@@ -20,6 +18,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   midContainer: {
+    paddingHorizontal: 5,
     justifyContent: 'space-around',
   },
   textname: {
@@ -33,6 +32,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#c4c8cc',
     marginLeft: 5,
+    marginRight: 0,
+    paddingHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -41,9 +42,10 @@ const styles = StyleSheet.create({
     color: 'grey',
   },
   connectButtonContainer: {
+    paddingRight: 5,
     flex: 1,
     justifyContent: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   connectButtonText: {
     color: 'black',

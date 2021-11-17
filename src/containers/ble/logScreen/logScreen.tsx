@@ -3,16 +3,16 @@ import {View, Text, FlatList, ScrollView, Dimensions} from 'react-native';
 
 import styles from './styles';
 
-import Button from '../../components/button';
+import Button from '../../../components/button';
 import {useDispatch, useSelector} from 'react-redux';
-import {reset} from '../../actions/';
-import {scan, stopScan} from '../../actions/bluetoothActions';
-import useBle from '../../hooks/useBle';
-import {checkBluetooth_, requestBluetooth_} from '../../services/permissions';
-import DeviceComponent from '../../components/device';
-import {RootState} from '../../store';
-import Modalka from '../../components/modal/modal';
-import { BLUETOOTH_BUTTON_RESET, BLUETOOTH_BUTTON_TURN_OFF, BLUETOOTH_BUTTON_TURN_ON } from '../../constants/titles';
+import {reset} from '../../../actions';
+import {scan, stopScan} from '../../../actions/bluetoothActions';
+import {checkBluetooth_, requestBluetooth_} from '../../../services/permissions';
+import DeviceComponent from '../../../components/device';
+import {RootState} from '../../../store';
+import Modalka from '../../../components/modal/modal';
+import { BLUETOOTH_BUTTON_RESET, BLUETOOTH_BUTTON_TURN_OFF, BLUETOOTH_BUTTON_TURN_ON } from '../../../constants/titles';
+import { COLOR_GREY, COLOR_MUDDY_BLUE } from '../../../constants/colors';
 
 type Props = {};
 const windowWidth = Dimensions.get('window').width;
@@ -27,7 +27,7 @@ const HomeScreen: React.FC<Props> = () => {
   const dispatch = useDispatch();
   const errorMessage = useSelector((state: RootState) => state.ble.message);
 
-  let color = bluetoothStatus ? '#798ce0' : 'grey';
+  let color = bluetoothStatus ? COLOR_MUDDY_BLUE : COLOR_GREY;
   const [modalVisible, setModalVisible] = useState(false);
   const [modalText, setModalText] = useState('');
 

@@ -1,5 +1,12 @@
 import React from 'react';
-import {Text, Pressable, StyleSheet, Image} from 'react-native';
+import {
+  Text,
+  Pressable,
+  StyleSheet,
+  Image,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import styles from './styles';
 
 interface Props {
@@ -22,11 +29,11 @@ const Button = (props: Props) => {
   } = props;
 
   return (
-    <Pressable style={style} onPress={onPress}>
+    <Pressable style={{...styles.button, ...style}} onPress={onPress}>
       {image ? (
-        <Image style = {imageStyle} source={{uri: image}} />
+        <Image style={imageStyle} source={{uri: image}} />
       ) : (
-        <Text style={textStyle}>{props.title}</Text>
+        <Text style={{...styles.buttonText, ...textStyle}}>{props.title}</Text>
       )}
     </Pressable>
   );

@@ -3,5 +3,6 @@ export const BLUETOOTHOFF = 'BLUETOOTHOFF';
 export const RESET = 'RESET';
 export const CHANGECURRENTDEVICE = 'CHANGECURRENTDEVICE';
 export const ADDDEVICE = 'ADDDEVICE';
+export const SETDEVICE = 'SETDEVICE';
 export const UPDATEDEVICE = 'UPDATEDEVICE';
 export const SETMESSAGE = 'SETMESSAGE';

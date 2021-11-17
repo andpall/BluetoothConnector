@@ -34,4 +34,10 @@ export const setMessage = (message: string) => {
     payload: message,
   };
 };
+export const setDevice = (device: any) => {
+  return {
+    type: types.SETDEVICE,
+    payload: device,
+  };
+};
 

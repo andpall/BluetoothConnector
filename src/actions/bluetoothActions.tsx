@@ -3,10 +3,18 @@ import {
   addDevice,
   bluetoothOff,
   bluetoothOn,
+  setDevice,
   setMessage,
   updateDevice,
 } from '.';
 import {AppDispatch, RootState} from '../store/store';
+
+const emptyDevice = {
+  id: '',
+  name: '',
+  isConnected: false,
+  isConnecting: false,
+};
 
 export const scan = () => {
   return (
@@ -14,13 +22,13 @@ export const scan = () => {
     getState: () => RootState,
     DeviceManager: BleManager,
   ) => {
+    dispatch(bluetoothOn());
     DeviceManager.startDeviceScan(null, null, (error, device) => {
       if (error) {
+        dispatch(bluetoothOff());
         dispatch(setMessage(JSON.stringify(error)));
         return;
       }
-      dispatch(bluetoothOn());
-
       device &&
         device.isConnected().then((isConnected: boolean) => {
           let {
@@ -29,13 +37,13 @@ export const scan = () => {
 
           const isScanned = checkIsScanned(device, devices);
           if (!isScanned) {
-            dispatch(
-              addDevice({
-                ...device,
-                isConnected: isConnected,
-                isConnecting: false,
-              }),
-            );
+            const deviceState = {
+              ...device,
+              isConnected: isConnected,
+              isConnecting: false,
+            };
+            dispatch(addDevice(deviceState));
+            isConnected && setDevice(deviceState);
           }
         });
     });
@@ -67,40 +75,91 @@ export const stopScan = () => {
   };
 };
 
-export const updateConnect = (device: Device) => {
+export const disconnectDevice = () => {
   return (
     dispatch: AppDispatch,
     getState: () => RootState,
     DeviceManager: BleManager,
   ) => {
     let {
-      ble: {devices},
+      ble: {device, devices},
     } = getState();
-    dispatch(
-      updateDevice({
-        ...device,
-        isConnecting: true,
-      }),
-    );
-    DeviceManager.connectToDevice(device.id, null)
-      .then(deviceUpdated => {
-        dispatch(
-          updateDevice({
-            ...device,
-            isConnected: deviceUpdated.isConnected,
-            isConnecting: false,
-          }),
-        );
-        dispatch(setMessage(JSON.stringify(deviceUpdated)));
-      })
-      .catch((error: any) => {
-        dispatch(
-          updateDevice({
-            ...device,
-            isConnecting: false,
-          }),
-        );
-        dispatch(setMessage(JSON.stringify(error)));
-      });
   };
+};
+
+export const updateConnect = (connectingDevice: Device) => {
+  return (
+    dispatch: AppDispatch,
+    getState: () => RootState,
+    DeviceManager: BleManager,
+  ) => {
+    let {
+      ble: {device, devices},
+    } = getState();
+    if (device.id !== '') {
+      DeviceManager.cancelDeviceConnection(device.id)
+        .then(deviceUpdated => {
+          const deviceState = {
+            ...deviceUpdated,
+            isConnected: false,
+            isConnecting: false,
+          };
+          dispatch(updateDevice(deviceState));
+          console.log('INSIDE CANSEL');
+          dispatch(setDevice(emptyDevice));
+          connectDevice(dispatch, getState, DeviceManager, connectingDevice);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else {
+      connectDevice(dispatch, getState, DeviceManager, connectingDevice);
+    }
+  };
+};
+
+const connectDevice = (
+  dispatch: AppDispatch,
+  getState: () => RootState,
+  DeviceManager: BleManager,
+  connectingDevice: Device,
+) => {
+  console.log('BEFORE CONNECTING');
+  dispatch(
+    updateDevice({
+      ...connectingDevice,
+      isConnecting: true,
+    }),
+  );
+  dispatch(
+    setDevice({
+      ...connectingDevice,
+      isConnecting: true,
+    }),
+  );
+  DeviceManager.connectToDevice(connectingDevice.id, null)
+    .then(deviceUpdated => {
+      deviceUpdated.isConnected().then(connectionStatus => {
+        const deviceState = {
+          ...deviceUpdated,
+          isConnected: connectionStatus,
+          isConnecting: false,
+        };
+        dispatch(updateDevice(deviceState));
+        dispatch(setMessage(JSON.stringify(deviceUpdated)));
+        if (deviceState.isConnected) {
+          dispatch(setDevice(deviceState));
+        }
+      });
+    })
+    .catch((error: any) => {
+      const deviceState = {
+        ...connectingDevice,
+        isConnecting: false,
+      };
+      dispatch(updateDevice(deviceState));
+      console.log('INSIDE CATCH');
+      dispatch(setDevice(emptyDevice));
+      dispatch(setMessage(JSON.stringify(error)));
+    });
 };
