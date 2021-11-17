@@ -14,6 +14,7 @@ import DeviceComponent from '../../../components/device';
 import {RootState} from '../../../store';
 import Modalka from '../../../components/modal/modal';
 import {
+  BLUETOOTH_BUTTON_NEXT,
   BLUETOOTH_BUTTON_RESET,
   BLUETOOTH_BUTTON_TURN_OFF,
   BLUETOOTH_BUTTON_TURN_ON,
@@ -99,7 +100,7 @@ const HomeScreen: React.FC<Props> = () => {
       </View>
       {device.isConnected && (
         <Button
-          title="Next"
+          title={BLUETOOTH_BUTTON_NEXT}
           style={styles.floatButton}
           onPress={nextPressHandler}
           textStyle={styles.blackText}

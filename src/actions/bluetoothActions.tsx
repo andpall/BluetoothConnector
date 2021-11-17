@@ -107,6 +107,12 @@ export const subscibeOnDevice = (onDisconnect: () => void) => {
     } = getState();
     console.log('DISCONNECTED')
     DeviceManager.onDeviceDisconnected(device.id, () => {
+      const deviceState = {
+        ...device,
+        isConnected: false,
+      };
+      dispatch(updateDevice(deviceState));
+      dispatch(setDevice(emptyDevice));
       onDisconnect();
     });
   };

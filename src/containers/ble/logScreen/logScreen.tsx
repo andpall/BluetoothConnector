@@ -8,20 +8,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {reset, setMessage} from '../../../actions';
 import {
   disconnectDevice,
-  scan,
-  stopScan,
   subscibeOnDevice,
 } from '../../../actions/bluetoothActions';
 import {RootState} from '../../../store';
 import {
-  BLUETOOTH_BUTTON_RESET,
-  BLUETOOTH_BUTTON_TURN_OFF,
-  BLUETOOTH_BUTTON_TURN_ON,
+  BLUETOOTH_BUTTON_DISCONNECT,
+  BUTTON_BACK,
 } from '../../../constants/titles';
 import {COLOR_GREY, COLOR_MUDDY_BLUE} from '../../../constants/colors';
 import * as routes from '../../../constants/routes';
-import {Device} from 'react-native-ble-plx';
-import Navigation from '../../../navigation';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {RootStackParamList} from '../../../types';
@@ -62,12 +57,12 @@ const HomeScreen: React.FC<Props> = () => {
         <View style={styles.buttonContainer}>
           <Button
             style={styles.button}
-            title={BLUETOOTH_BUTTON_RESET}
+            title={BLUETOOTH_BUTTON_DISCONNECT}
             onPress={() => dispatch(disconnectDevice())}
           />
           <Button
             style={styles.button}
-            title={BLUETOOTH_BUTTON_RESET}
+            title={BUTTON_BACK}
             onPress={() => navigation.navigate(routes.DEVICE_LIST_SCREEN)}
           />
         </View>

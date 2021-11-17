@@ -2,10 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  FlatList,
-  ScrollView,
   Dimensions,
-  ImageComponent,
   Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
