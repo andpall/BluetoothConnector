@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  Dimensions,
-  Image,
-} from 'react-native';
+import {View, Text, Dimensions, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
 
@@ -41,15 +36,13 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const PersmScreen: React.FC<Props> = () => {
-  const bluetoothStatus = useSelector(
-    (state: RootState) => state.ble.isBluetoothOn,
-  );
-
   const navigation = useNavigation<ScreenNavigationProp>();
 
   const [permissions, setPermissions] = useState(false);
-  const [message, setMessage] = useState('');
-  let color = permissions ? COLOR_MUDDY_BLUE : COLOR_GREY;
+  const color = permissions ? COLOR_MUDDY_BLUE : COLOR_GREY;
+  const message = permissions
+    ? 'The permission is granted'
+    : 'The permission is not granted';
 
   useEffect(() => {
     checkPermissions();
@@ -57,8 +50,7 @@ const PersmScreen: React.FC<Props> = () => {
 
   const checkPermissions = async () => {
     let isAvailable = await checkBluetooth_();
-    setPermissions(isAvailable.value);
-    setMessage(isAvailable.message);
+    setPermissions(isAvailable);
   };
 
   const askPermissions = async () => {

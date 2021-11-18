@@ -1,15 +1,12 @@
+import {PermissionsAndroid} from 'react-native';
 import {
   PERMISSIONS,
   RESULTS,
   checkMultiple,
   requestMultiple,
-  PermissionStatus,
 } from 'react-native-permissions';
 
-const checkBluetooth_ = async (): Promise<{
-  value: boolean;
-  message: string;
-}> => {
+const checkBluetooth_ = async (): Promise<boolean> => {
   return checkMultiple([
     PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
     PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
@@ -17,36 +14,11 @@ const checkBluetooth_ = async (): Promise<{
     PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE,
   ])
     .then(statuses => {
-      switch (statuses['android.permission.ACCESS_FINE_LOCATION']) {
-        case 'unavailable':
-          return {value: false, message: 'This feature is not available'};
-          break;
-        case 'blocked':
-          return {
-            value: false,
-            message: 'The permission has not been blocked',
-          };
-          break;
-        case 'limited':
-          return {
-            value: false,
-            message: 'The permission is limited',
-          };
-
-          break;
-        case 'granted':
-          return {value: true, message: 'The permission is granted'};
-          break;
-        case 'denied':
-          return {
-            value: true,
-            message: 'The permission is denied and not requestable anymore',
-          };
-          break;
-      }
+      return statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.GRANTED;
     })
     .catch(error => {
-      return {value: true, message: error};
+      console.log(error);
+      return false;
     });
 };
 
@@ -57,7 +29,7 @@ const requestBluetooth_ = async () => {
     PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
     PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE,
   ]).then(statuses => {
-    return (`Bluetooth ${statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]}`);
+    return `Bluetooth ${statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]}`;
   });
 };
 

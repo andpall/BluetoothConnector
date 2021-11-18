@@ -1,10 +1,18 @@
-import {createStore, applyMiddleware, compose, combineReducers, Dispatch, AnyAction} from 'redux';
+import {
+  createStore,
+  applyMiddleware,
+  compose,
+  combineReducers,
+  Dispatch,
+  AnyAction,
+} from 'redux';
 import logger from 'redux-logger';
 import {persistReducer, persistStore} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import thunkMiddleware from 'redux-thunk';
 import {BleManager, Device} from 'react-native-ble-plx';
 import {composeWithDevTools} from 'redux-devtools-extension';
+import {apiMiddleware} from '../services/api';
 
 import bleReducer from '../reducers';
 
@@ -31,11 +39,11 @@ export const configureStore = () => {
   const persitedReducer = persistReducer(persistConfig, rootReducer);
 
   const middlewares = [
+    apiMiddleware,
     thunkMiddleware.withExtraArgument(
       new BleManager({
         restoreStateIdentifier: 'BleInTheBackground',
-        restoreStateFunction: restoredState => {
-        },
+        restoreStateFunction: restoredState => {},
       }),
     ),
   ];
