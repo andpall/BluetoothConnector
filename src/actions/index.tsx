@@ -16,15 +16,27 @@ export const reset = () => {
     type: types.RESET,
   };
 };
-export const addDevice = (device: Device) => {
+export const addDevice = (device: any) => {
   return {
     type: types.ADDDEVICE,
     payload: device,
   };
 };
-export const updateDevice = (device: Device) => {
+export const updateDevice = (device: any) => {
   return {
     type: types.UPDATEDEVICE,
+    payload: device,
+  };
+};
+export const setMessage = (message: string) => {
+  return {
+    type: types.SETMESSAGE,
+    payload: message,
+  };
+};
+export const setDevice = (device: any) => {
+  return {
+    type: types.SETDEVICE,
     payload: device,
   };
 };

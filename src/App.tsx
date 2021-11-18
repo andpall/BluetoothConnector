@@ -10,7 +10,7 @@ import {
 
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
-import Navigation from './navigator';
+import Navigation from './navigation';
 
 import {configureStore} from './store';
 

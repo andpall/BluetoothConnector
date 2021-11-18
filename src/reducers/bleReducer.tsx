@@ -6,6 +6,7 @@ let initialState = {
   device: {id: '', name: '', isConnected: false, isConnecting: false},
   devices: [],
   isBluetoothOn: false,
+  message: '',
 };
 
 const bleReducer = (state = initialState, action: AnyAction) => {
@@ -34,13 +35,25 @@ const bleReducer = (state = initialState, action: AnyAction) => {
         devices: [...state.devices, action.payload],
       };
     }
+    case types.SETDEVICE: {
+      return {
+        ...state,
+        device: action.payload,
+      };
+    }
     case types.UPDATEDEVICE: {
       return {
         ...state,
         devices: [
-          ...state.devices.filter(item => item.id !== action.payload.id),
           action.payload,
+          ...state.devices.filter(item => item.id !== action.payload.id),
         ],
+      };
+    }
+    case types.SETMESSAGE: {
+      return {
+        ...state,
+        message: action.payload,
       };
     }
     case types.RESET:

@@ -4,12 +4,10 @@ const styles = StyleSheet.create({
   mainContainer: {
     color: 'grey',
     paddingVertical: 2,
-    paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: '#c4c8cc',
     borderRadius: 1,
     backgroundColor: 'white',
-    marginVertical: 0,
     width: '100%',
     height: 60,
   },
@@ -20,6 +18,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   midContainer: {
+    paddingHorizontal: 5,
     justifyContent: 'space-around',
   },
   textname: {
@@ -27,27 +26,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   connectButton: {
-    width: 150,
+    width: 105,
     height: 50,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#c4c8cc',
-    marginLeft: 15,
+    marginLeft: 5,
+    marginRight: 0,
+    paddingHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#798ce0',
   },
   deviceId: {
     fontSize: 16,
     color: 'grey',
   },
   connectButtonContainer: {
+    paddingRight: 5,
     flex: 1,
-    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
   },
   connectButtonText: {
     color: 'black',
-    fontSize: 20,
+    fontSize: 18,
   },
 });
 export default styles;
