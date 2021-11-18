@@ -2,10 +2,7 @@ import React from 'react';
 import {
   Text,
   Pressable,
-  StyleSheet,
   Image,
-  StyleProp,
-  ViewStyle,
 } from 'react-native';
 import styles from './styles';
 
@@ -20,7 +17,7 @@ interface Props {
 
 const Button = (props: Props) => {
   const {
-    title: string = '',
+    title = '',
     onPress = () => {},
     textStyle = styles.buttonText,
     imageStyle = {},
@@ -33,7 +30,7 @@ const Button = (props: Props) => {
       {image ? (
         <Image style={imageStyle} source={{uri: image}} />
       ) : (
-        <Text style={{...styles.buttonText, ...textStyle}}>{props.title}</Text>
+        <Text style={{...styles.buttonText, ...textStyle}}>{title}</Text>
       )}
     </Pressable>
   );

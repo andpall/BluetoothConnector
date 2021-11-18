@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import {View, Text, FlatList, ScrollView, Dimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
@@ -20,7 +20,7 @@ import {
   BLUETOOTH_BUTTON_TURN_OFF,
   BLUETOOTH_BUTTON_TURN_ON,
 } from '../../../constants/titles';
-import {COLOR_GREY, COLOR_MUDDY_BLUE} from '../../../constants/colors';
+import {COLOR_GREY, COLOR_LIGHT_GREY, COLOR_MUDDY_BLUE} from '../../../constants/colors';
 import * as routes from '../../../constants/routes';
 
 type ScreenNavigationProp = NativeStackNavigationProp<
@@ -55,6 +55,14 @@ const HomeScreen: React.FC<Props> = () => {
       return () => dispatch(stopScan());
     }, []),
   );
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShadowVisible: false,
+      headerStyle: {backgroundColor: COLOR_LIGHT_GREY},
+      headerTransparent: false,
+    });
+  }, []);
 
   const nextPressHandler = () => {
     navigation.navigate(routes.DEVICE_LOG_SCREEN);

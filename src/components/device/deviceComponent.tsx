@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setMessage, updateDevice} from '../../actions';
 import {disconnectDevice, updateConnect} from '../../actions/bluetoothActions';
 import {Device} from 'react-native-ble-plx';
-import {COLOR_MUDDY_BLUE, COLOR_WHITE} from '../../constants/colors';
+import {COLOR_LIGHT_GREY, COLOR_MUDDY_BLUE, COLOR_WHITE} from '../../constants/colors';
 import {
   DEVICE_BUTTON_CONNECT,
   DEVICE_BUTTON_CONNECTED,
@@ -77,7 +77,7 @@ const DeviceComponent = (props: Props) => {
         </View>
         <View style={styles.connectButtonContainer}>
           <Button
-            style={{...styles.connectButton, backgroundColor: '#f4f4f4'}}
+            style={{...styles.connectButton, backgroundColor: COLOR_LIGHT_GREY}}
             title="Info"
             textStyle={styles.connectButtonText}
             onPress={pressHanlderInfo}

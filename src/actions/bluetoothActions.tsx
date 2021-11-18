@@ -43,7 +43,7 @@ export const scan = () => {
               isConnecting: false,
             };
             dispatch(addDevice(deviceState));
-            isConnected && setDevice(deviceState);
+            isConnected && dispatch(setDevice(deviceState));
           }
         });
     });

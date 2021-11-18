@@ -15,34 +15,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 const TopTab = createMaterialTopTabNavigator();
 
-const BleComponent = props => {
-  const {name} = props.route;
-  switch (name) {
-    case routes.PERMISSION_SCREEN: {
-      return <BlePermissionScreen tabName={routes.PERMISSION_SCREEN} />;
-    }
-    case routes.DEVICE_LIST_SCREEN: {
-      return <DeviceListScreen tabName={routes.DEVICE_LIST_SCREEN} />;
-    }
-    case routes.DEVICE_LOG_SCREEN: {
-      return <DeviceLogScreen tabName={routes.DEVICE_LIST_SCREEN} />;
-    }
-    default: {
-      return <></>;
-    }
-  }
-};
-
-const BleStackScreen = () => {
-  return (
-    <Tab.Navigator screenOptions={{headerShown: false, tabBarShowLabel: false}}>
-      <Tab.Screen name={routes.PERMISSION_SCREEN} component={BleComponent} />
-      {/* <Tab.Screen name={routes.DEVICE_LIST_SCREEN} component={BleComponent} />
-      <Tab.Screen name={routes.DEVICE_LOG_SCREEN} component={BleComponent} /> */}
-    </Tab.Navigator>
-  );
-};
-
 const Navigation = () => {
   return (
     <NavigationContainer>
@@ -57,10 +29,12 @@ const Navigation = () => {
         <Stack.Screen
           name={routes.DEVICE_LIST_SCREEN}
           component={DeviceListScreen}
+          options = {{headerShown: true}}
         />
         <Stack.Screen
           name={routes.DEVICE_LOG_SCREEN}
           component={DeviceLogScreen}
+          options = {{headerShown: true}}
         />
       </Stack.Navigator>
     </NavigationContainer>
